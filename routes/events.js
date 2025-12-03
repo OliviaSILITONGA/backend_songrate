@@ -1,30 +1,20 @@
-const express = require('express');
+const {
+  getAllEvents,
+  getEventById,
+  createEvent,
+  updateEvent,
+  deleteEvent,
+  addComment
+} = require('../controllers/eventsController');
+
 const router = express.Router();
-const eventsController = require('../controllers/eventsController');
 
-// @route   GET api/events
-// @desc    Get all events
-// @access  Public
-router.get('/', eventsController.getEvents);
+router.get('/', getAllEvents);
+router.get('/:id', getEventById);
+router.post('/', createEvent);
+router.put('/:id', updateEvent);
+router.delete('/:id', deleteEvent);
 
-// @route   GET api/events/:id
-// @desc    Get single event by ID
-// @access  Public
-router.get('/:id', eventsController.getEvent);
-
-// @route   POST api/events
-// @desc    Create an event
-// @access  Public (bisa diubah menjadi private dengan autentikasi)
-router.post('/', eventsController.createEvent);
-
-// @route   PUT api/events/:id
-// @desc    Update an event
-// @access  Public (bisa diubah menjadi private dengan autentikasi)
-router.put('/:id', eventsController.updateEvent);
-
-// @route   DELETE api/events/:id
-// @desc    Delete an event
-// @access  Public (bisa diubah menjadi private dengan autentikasi)
-router.delete('/:id', eventsController.deleteEvent);
+router.post('/:eventId/comment', addComment);
 
 module.exports = router;
