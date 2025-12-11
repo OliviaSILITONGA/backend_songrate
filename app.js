@@ -1,25 +1,24 @@
 const express = require('express');
 const cors = require('cors');
-const { connectDB } = require('./config/db'); // Pastikan file config/db.js kamu benar (lihat poin 2)
+const { connectDB } = require('./config/db');
 
-// Import Routes
-const eventRoutes = require('./routes/events');
-const authRoutes = require('./routes/auth'); // <--- TAMBAHKAN INI
+// --- PERBAIKAN DI SINI ---
+// HAPUS atau GANTI baris ini: const eventRoutes = require('./routes/events');
+const reviewRoutes = require('./routes/reviews'); // Pastikan nama file 'reviews.js' ada di folder routes!
+const authRoutes = require('./routes/auth'); 
 
 const app = express();
 
-// Hubungkan ke Database
 connectDB();
 
-// Middleware
-app.use(express.json({ extended: false })); // Agar bisa baca JSON dari frontend
-app.use(cors()); // Agar frontend beda port bisa akses
+app.use(express.json({ extended: false }));
+app.use(cors());
 
-// Definisikan Routes (Endpoints)
-app.use('/api/events', eventRoutes);
-app.use('/api/auth', authRoutes); // <--- TAMBAHKAN INI (Login/Signup akan di /api/auth/signup)
+// --- PERBAIKAN DI SINI JUGA ---
+// HAPUS atau GANTI baris ini: app.use('/api/events', eventRoutes);
+app.use('/api/reviews', reviewRoutes); // Endpoint berubah jadi /api/reviews
+app.use('/api/auth', authRoutes);
 
-// Test Route
 app.get('/', (req, res) => {
   res.send('API SongRATE Running...');
 });

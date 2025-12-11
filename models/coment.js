@@ -1,47 +1,52 @@
-module.exports = (sequelize, DataTypes) => {
-    const Comment = sequelize.define('Comment', {
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true,
-            allowNull: false
-        },
-        coment_id: { // Foreign Key baru untuk menghubungkan ke Event
-            type: DataTypes.INTEGER,
-            allowNull: true
-        },
-        title: {
-            type: DataTypes.TEXT,
-            allowNull: false
-        },
-        album: {
-            type: DataTypes.TEXT
-        },
-        artist: {
-            type: DataTypes.TEXT
-        },
-        rating: {
-            type: DataTypes.INTEGER,
-            allowNull: false
-        },
-        message: {
-            type: DataTypes.TEXT
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/db');
+
+const Comment = sequelize.define('Comment', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+    },
+    
+    // Simpan siapa yang me-review
+    user_id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        references: {
+             model: 'Users',
+             key: 'id'
         }
-        // created_at akan ditangani oleh timestamps: true
-    }, {
-        tableName: 'comments',
-        timestamps: true,
-        underscored: true // Penting agar created_at menjadi created_at, bukan createdAt
-    });
+    },
+    username: { 
+        type: DataTypes.STRING,
+        allowNull: true 
+    },
+    title: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    artist: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    album: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    rating: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: { min: 1, max: 5 } // Validasi rating 1-5
+    },
+    message: {
+        type: DataTypes.TEXT,
+        allowNull: true
+    }
+}, {
+    tableName: 'comments',
+    timestamps: true, 
+    underscored: true
+});
 
-    // Mendefinisikan Asosiasi
-    Comment.associate = function(models) {
-        // Comment memiliki hubungan belongsTo (milik) ke satu Event
-        Comment.belongsTo(models.Event, {
-            foreignKey: 'event_id', // Menunjuk ke kolom Foreign Key di tabel comments
-            as: 'event'
-        });
-    };
-
-    return Comment;
-};
+module.exports = Comment;
