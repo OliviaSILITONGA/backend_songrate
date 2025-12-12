@@ -1,28 +1,28 @@
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
-// Setup koneksi PostgreSQL
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
-  {
-    host: process.env.DB_HOST || 'localhost',
-    dialect: 'postgres',
-    port: process.env.DB_PORT || 5432,
-    logging: false,
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialect: 'postgres',
+  protocol: 'postgres',
+  logging: false,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }
   }
-);
+});
 
 const connectDB = async () => {
   try {
     await sequelize.authenticate();
-    console.log('✅ PostgreSQL Database Connected...');
+    console.log('✅ Connected to Railway PostgreSQL');
     
-    await sequelize.sync({ alter: true }); 
-    console.log('✅ Models Synced to PostgreSQL...');
+    // Sync model di sini
+    await sequelize.sync({ alter: true });  // sync semua model (alter: true untuk update tabel)
+    console.log('✅ Models synced to Railway');
   } catch (err) {
-    console.error('❌ Database Connection Error:', err.message);
+    console.error('❌ Database connection error:', err.message);
     process.exit(1);
   }
 };

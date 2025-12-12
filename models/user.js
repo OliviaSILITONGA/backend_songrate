@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/db');
 
+// Model User
 const User = sequelize.define('User', {
   id: {
     type: DataTypes.STRING,
@@ -24,14 +25,14 @@ const User = sequelize.define('User', {
     allowNull: false
   },
   created_at: {
-    type: DataTypes.DATEONLY,
+    type: DataTypes.DATEONLY,  // tipe DATE
     allowNull: false,
     defaultValue: DataTypes.NOW,
     field: 'created_at'
   }
 }, {
   timestamps: false,
-  tableName: 'users'
+  tableName: 'Users'  // pastikan ini sesuai dengan nama tabel di PostgreSQL
 });
 
 module.exports = User;
