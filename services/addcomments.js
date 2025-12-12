@@ -1,11 +1,12 @@
-const { Comment } = require('../models/comment'); 
-const { User } = require('../models/user');
+const Comment = require('../models/comment'); 
+const User = require('../models/user'); // Asumsi User ada
 
 const getAllReviews = async () => {
   return await Comment.findAll({
     include: [
       {
         model: User,
+        as: 'user', 
         attributes: ['username']
       }
     ],
@@ -13,11 +14,13 @@ const getAllReviews = async () => {
   });
 };
 
-const addReview = async (userId, data) => {
-  const { title, artist, rating, message } = data;
+// Parameter hanya 'data' (satu objek)
+const addReview = async (data) => {
+  // Kita bongkar (destructure) data di sini
+  const { userId, title, artist, rating, message } = data;
   
   const newReview = await Comment.create({
-    userId: userId,
+    userId, // Ini akan dipetakan ke 'user_id' oleh Model
     title,
     artist,
     rating,

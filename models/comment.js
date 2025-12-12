@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/db');
-const User = require('./user'); // Pastikan path ini benar ke model User Anda
+const User = require('./user'); 
 
 const Comment = sequelize.define('Comment', {
   id: {
@@ -9,19 +9,20 @@ const Comment = sequelize.define('Comment', {
     primaryKey: true
   },
   userId: {
-    type: DataTypes.STRING, // Sesuaikan dengan tipe ID di tabel User (STRING/UUID)
+    type: DataTypes.TEXT,
     allowNull: false,
+    field: 'user_id',
     references: {
       model: User, 
       key: 'id'
     }
   },
   title: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false
   },
   artist: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false
   },
   rating: {
@@ -38,11 +39,10 @@ const Comment = sequelize.define('Comment', {
   }
 }, {
   timestamps: true,
-  tableName: 'comments' // Memastikan nama tabel konsisten di Postgres
+  tableName: 'comments',
+  underscored: true
 });
 
-// Setup Relasi (Penting untuk Include di Controller)
 Comment.belongsTo(User, { foreignKey: 'userId', as: 'user' });
-User.hasMany(Comment, { foreignKey: 'userId' });
 
 module.exports = Comment;
